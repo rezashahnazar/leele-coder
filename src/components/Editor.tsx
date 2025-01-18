@@ -64,6 +64,18 @@ export function CodeEditor({
   const titleInputRef = useRef<HTMLInputElement>(null);
   const { settings, hasUnsavedChanges, setHasUnsavedChanges } = useEditor();
 
+  // Update state when initial props change
+  useEffect(() => {
+    if (initialCode !== undefined) setCode(initialCode);
+    if (initialTitle !== undefined) setTitle(initialTitle);
+    if (initialMetaTitle !== undefined) setMetaTitle(initialMetaTitle);
+
+    // Update last saved state to match initial values
+    if (initialCode !== undefined) setLastSavedCode(initialCode);
+    if (initialTitle !== undefined) setLastSavedTitle(initialTitle);
+    if (initialMetaTitle !== undefined) setLastSavedMetaTitle(initialMetaTitle);
+  }, [initialCode, initialTitle, initialMetaTitle]);
+
   useEffect(() => {
     setDocumentTitle(metaTitle || title);
   }, [metaTitle, title]);
@@ -83,17 +95,32 @@ export function CodeEditor({
     lastSavedMetaTitle,
   ]);
 
+  const handleSave = async () => {
+    try {
+      const saveSuccessful = await onSave(code, title, metaTitle);
+      if (saveSuccessful) {
+        // Update last saved state only after successful save
+        setLastSavedCode(code);
+        setLastSavedTitle(title);
+        setLastSavedMetaTitle(metaTitle);
+        setHasUnsavedChanges(false);
+      }
+    } catch (error) {
+      console.error("Save failed:", error);
+    }
+  };
+
   useEffect(() => {
-    const handleKeyboardShortcuts = (e: KeyboardEvent) => {
+    const handleKeyboardShortcuts = async (e: KeyboardEvent) => {
       // Save shortcut (Cmd/Ctrl + S)
       if ((e.metaKey || e.ctrlKey) && e.key === "s") {
         e.preventDefault();
-        if (!isSaving && hasUnsavedChanges) {
-          handleSave();
+        if (!isSaving) {
+          await handleSave();
         }
       }
-      // Publish shortcut (Cmd/Ctrl + P)
-      if ((e.metaKey || e.ctrlKey) && e.key === "p") {
+      // Deploy shortcut (Cmd/Ctrl + D)
+      if ((e.metaKey || e.ctrlKey) && e.key === "d") {
         e.preventDefault();
         if (!isPublishing && !hasUnsavedChanges) {
           onPublish(code, title, metaTitle);
@@ -103,7 +130,15 @@ export function CodeEditor({
 
     window.addEventListener("keydown", handleKeyboardShortcuts);
     return () => window.removeEventListener("keydown", handleKeyboardShortcuts);
-  }, [isSaving, isPublishing, hasUnsavedChanges]);
+  }, [
+    isSaving,
+    isPublishing,
+    hasUnsavedChanges,
+    code,
+    title,
+    metaTitle,
+    onPublish,
+  ]);
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -141,26 +176,6 @@ export function CodeEditor({
       setTimeout(() => {
         editorRef.current?.focus();
       }, 0);
-    }
-  };
-
-  const handleTitleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsEditingTitle(false);
-  };
-
-  const handleSave = async () => {
-    try {
-      const saveSuccessful = await onSave(code, title, metaTitle);
-      if (saveSuccessful) {
-        // Update last saved state only after successful save
-        setLastSavedCode(code);
-        setLastSavedTitle(title);
-        setLastSavedMetaTitle(metaTitle);
-        setHasUnsavedChanges(false);
-      }
-    } catch (error) {
-      console.error("Save failed:", error);
     }
   };
 
@@ -249,11 +264,11 @@ export function CodeEditor({
                     ) : (
                       <Play size={16} />
                     )}
-                    <span className="text-sm">Publish</span>
+                    <span className="text-sm">Deploy</span>
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Publish code (⌘P)</p>
+                  <p>Deploy code (⌘D)</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

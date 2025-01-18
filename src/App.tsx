@@ -15,6 +15,7 @@ function Layout() {
       {!isPreviewPage && <Sidebar />}
       <Routes>
         <Route path="/" element={<EditorPage />} />
+        <Route path="/editor/:id" element={<EditorPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/preview/:id" element={<PreviewPage />} />
       </Routes>
