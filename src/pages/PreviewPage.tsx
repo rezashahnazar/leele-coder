@@ -5,12 +5,6 @@ import { AlertCircle } from "lucide-react";
 import * as Babel from "@babel/standalone";
 import { setDocumentTitle } from "../lib/utils";
 
-interface CodeSnippet {
-  code: string;
-  title: string;
-  meta_title: string;
-}
-
 export function PreviewPage() {
   const { id } = useParams();
   const [code, setCode] = useState<string | null>(null);
@@ -21,9 +15,9 @@ export function PreviewPage() {
 
   useEffect(() => {
     if (metaTitle || title) {
-      setDocumentTitle(`Preview: ${metaTitle || title}`);
+      setDocumentTitle(`${metaTitle || title}`);
     } else {
-      setDocumentTitle("Preview");
+      setDocumentTitle("Yet Another LeelE Coded Page");
     }
   }, [metaTitle, title]);
 

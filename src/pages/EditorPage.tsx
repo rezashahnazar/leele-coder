@@ -68,7 +68,7 @@ export function EditorPage() {
   };
 
   const handleSave = async (code: string, title: string, metaTitle: string) => {
-    if (!(await handleAuth(code, title, metaTitle, "save"))) return;
+    if (!(await handleAuth(code, title, metaTitle, "save"))) return false;
 
     try {
       setSaving(true);
@@ -79,7 +79,7 @@ export function EditorPage() {
       if (!user) {
         setDialogMessage("Please sign in to save code");
         setShowSaveDialog(true);
-        return;
+        return false;
       }
 
       const { error } = await supabase.from("code_snippets").insert({
@@ -91,12 +91,12 @@ export function EditorPage() {
       });
 
       if (error) throw error;
-      setDialogMessage("Code saved successfully!");
-      setShowSaveDialog(true);
+      return true;
     } catch (error) {
       console.error("Error saving code:", error);
       setDialogMessage("Failed to save code");
       setShowSaveDialog(true);
+      return false;
     } finally {
       setSaving(false);
     }

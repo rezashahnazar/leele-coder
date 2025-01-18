@@ -9,6 +9,8 @@ interface EditorContextType {
   settings: EditorSettings;
   updateSettings: (newSettings: Partial<EditorSettings>) => void;
   isDarkTheme: boolean;
+  hasUnsavedChanges: boolean;
+  setHasUnsavedChanges: (value: boolean) => void;
 }
 
 const defaultSettings: EditorSettings = {
@@ -23,6 +25,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
     const savedSettings = localStorage.getItem("editorSettings");
     return savedSettings ? JSON.parse(savedSettings) : defaultSettings;
   });
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("editorSettings", JSON.stringify(settings));
@@ -48,6 +51,8 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
         settings,
         updateSettings,
         isDarkTheme: settings.theme === "vs-dark",
+        hasUnsavedChanges,
+        setHasUnsavedChanges,
       }}
     >
       {children}

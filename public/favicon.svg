@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="#18181B"/>
+  
+  <!-- Main shapes -->
+  <path 
+    d="M144 144V368H368" 
+    stroke="#3B82F6" 
+    stroke-width="56" 
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  
+  <!-- Code element -->
+  <path 
+    d="M256 208L368 208" 
+    stroke="#8B5CF6" 
+    stroke-width="40" 
+    stroke-linecap="round"
+  />
+  
+  <path 
+    d="M256 288L368 288" 
+    stroke="#8B5CF6" 
+    stroke-width="40" 
+    stroke-linecap="round"
+  />
+</svg> 
