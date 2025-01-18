@@ -208,12 +208,12 @@ export function CodeEditor({
             </div>
           </div>
           <div className="absolute inset-x-0 flex items-center justify-center pointer-events-none">
-            <div className="flex items-center gap-3 text-[var(--text-secondary)] opacity-50">
+            <div className="hidden md:flex items-center gap-3 text-[var(--text-secondary)] opacity-50">
               <div className="relative w-7 h-7 bg-[#18181B] rounded-md flex items-center justify-center">
                 <div className="absolute left-[20%] top-[20%] bottom-[20%] w-[3px] bg-blue-500 rounded-full" />
                 <div className="absolute left-[20%] bottom-[20%] right-[20%] h-[3px] bg-blue-500 rounded-full" />
                 <div className="absolute right-[35%] top-[35%] w-[30%] h-[2px] bg-violet-500 rounded-full" />
-                <div className="absolute right-[35%] bottom-[35%] w-[30%] h-[2px] bg-violet-500 rounded-full" />
+                <div className="absolute right-[35%] bottom-[35%] w-[2px] h-[2px] bg-violet-500 rounded-full" />
               </div>
               <span className="font-semibold text-base tracking-wide">
                 LeelE Coder
